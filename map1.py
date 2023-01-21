@@ -5,7 +5,7 @@ def my_map (y, x):
     for j in range (y):
         my_row = []
         for i  in range (x):
-            my_row.append('o')
+            my_row.append(0)
         field.append(my_row)
     return field
     
@@ -18,6 +18,7 @@ def my_path(length, my_map, start= [0,0]):
     my_map[y][x] = "On"
     #last_direction = 2
     #direction = 0
+    tracker = []
     for tiles in range(length): #0123 =>nwse or can used while not at the end
        
             
@@ -28,24 +29,35 @@ def my_path(length, my_map, start= [0,0]):
         #check surronfing
         position_list = []
         direction_list = []
+        
         cross_mvt_list = [[0,1],[0,-1],[1,0], [-1,0]] 
         for j in range (-1, 2):
             
             for i in range (-1, 2):
 
-                if (y+j)in range(len(my_map)) and (x+i) in range(len(my_map[0])) and my_map[y+j][x+i] == "o" :
-                    if [j,i] in cross_mvt_list:
-                        direction_list.append([j, i])
+                if (y+j)in range(len(my_map)) and (x+i) in range(len(my_map[0])) and my_map[y+j][x+i] == 0 :
+                    if [j,i] in cross_mvt_list: # this limits the direction to cross direcrtion
+                        if tiles > 2:
+                            if [j,i] != tracker[tiles-2]:
+                                direction_list.append([j, i]) #direction 
                     
-                        position_list.append([y+j,x+i]) # diago mvt included
-                    # use filter to get in 
+                                position_list.append([y+j,x+i])
 
-        if len(position_list) == 0:
-            my_map[y][x] = 'Death'
+                        else:
+                            direction_list.append([j, i]) #direction 
+                    
+                            position_list.append([y+j,x+i]) # this is the position available
+                    
+
+        if len(position_list) == 0:# there are no direction possible => dead end
+            my_map[y][x] = 'Death' 
             break    
 
         #print(direction_list)
-        position = position_list[randint(0,len(position_list)-1)]
+        index = randint(0,len(position_list)-1)
+        position = position_list[index]
+        tracker.append([ -x for x in direction_list[index] ])
+        #print(tracker) #tracking the position use the previous 2
         y,x = position
         #path position list
         #print('position y,x is', direction)
@@ -53,7 +65,7 @@ def my_path(length, my_map, start= [0,0]):
         if x == len(my_map[0])-1 and y == len(my_map)-1:
             my_map[y][x] = 'End'
             print('You reached the end')
-            print(f"Using {tiles} tiles")
+            print(f"Using {tiles+1} tiles")
 
             return my_map
         #elif direction == 0 and y!= 0:
@@ -71,7 +83,7 @@ def my_path(length, my_map, start= [0,0]):
         #if my_map[y][x] == "x" or my_map[y][x] == "db" :
             my_map[y][x] = "db"
         else:
-            my_map[y][x] = tiles
+            my_map[y][x] = tiles+1
 
     return my_map
 
@@ -93,4 +105,6 @@ def my_path(length, my_map, start= [0,0]):
          
 c = (my_map(7,7))
 
-show_map(my_path(14,c))
+d = (my_path(49,c))
+
+show_map(d)
