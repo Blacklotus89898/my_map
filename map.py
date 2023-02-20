@@ -115,23 +115,39 @@ def spot_finder2(map):
     
     for y in range(len(map)):
         for x in range(len(map[y])):
-            if map[y][x] == '[+]': #check adjacent case
+            if map[y][x] not in '[+], [D], [S], [W]' : #check adjacent case
+                counter = map[y][x].strip("[]")
+                if counter == ' ':
+                    counter = 0
+                counter = int(counter)
                 
-                for j in range (-2, 3): #this is a 5*5 radius effect
-            
-                    for i in range (-2, 3):
+                j = -2
+                while j <3:
+                    
+                    
+
+                #for j in range (-2, 3): #this is a 5*5 radius effect
+                
+                    i = -2
+                    while i<3:
+                    #for i in range (-2, 3):
 
                         if (y+j)in range(len(map)) and (x+i) in range(len(map[0])): 
-                            if map[y+j][x+i] not in '[+], [D], [S], [W]':
-                                counter = map[y+j][x+i]
+                            if map[y+j][x+i] == "[+]":#or "[D]" or '[S]' or '[W]'):
+                                #counter = map[y+j][x+i].strip("[]")
           
-                                counter = counter.strip("[]")
-                                if counter == ' ':
-                                    counter = 0 
-                 
-                                counter = int(counter)
-                                counter+=1
-                                map[y+j][x+i] = f'[{counter}]' #higher value means greater priority
+                                #counter = counter
+                                #if counter == ' ':
+                                 #   counter = 0 
+                                
+                                
+                                counter += 1
+                            else: 
+                                counter = counter
+                        i+=1
+                    j+=1
+                map[y][x] = f'[{counter}]'
+                counter = 0 #higher value means greater priority
                     
     return map       
 #def position_finder(map):-
@@ -144,12 +160,12 @@ def spot_finder2(map):
 #chess game
     #diagonal
     
-
+#pathfinding
 
          
-c = (my_map(5,5))
+c = (my_map(7,7))
 
-d = (my_path(25,c))
+d = (my_path(30,c))
 show_map(d)
 
 print('Corners:3x3')
