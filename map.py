@@ -162,16 +162,19 @@ def spot_finder2(map):
     
 #pathfinding
 
-         
-c = (my_map(7,7))
 
-d = (my_path(30,c))
-show_map(d)
 
-print('Corners:3x3')
+if __name__ == "__main__":
+             
+    c = (my_map(7,7))
 
-e = spot_finder(d)
-show_map(e)
+    d = (my_path(30,c))
+    show_map(d)
 
-print('5x5')
-show_map(spot_finder2(d))
+    print('Corners:3x3')
+
+    e = spot_finder(d)
+    show_map(e)
+
+    print('5x5')
+    show_map(spot_finder2(d))
