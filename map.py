@@ -15,7 +15,7 @@ def show_map(map1):
 
 def my_path(length, my_map, start= [0,0]):
     y,x = start
-    my_map[y][x] = "[S]"
+    my_map[y][x] = '[S]'
     #last_direction = 2
     #direction = 0
     tracker = []
@@ -91,7 +91,7 @@ def spot_finder(map):
     
     for y in range(len(map)):
         for x in range(len(map[y])):
-            if map[y][x] == '[+]': #check adjacent case
+            if map[y][x] in '[+], [S], [D], [W]': #check adjacent case
                 
                 for j in range (-1, 2): #this is a 3 by 3 range
             
@@ -111,45 +111,52 @@ def spot_finder(map):
                     
     return map
 
-def spot_finder2(map):
+def spot_finder2(map): 
+    dimension = 5 #choose your dxd dimension
     
     for y in range(len(map)):
         for x in range(len(map[y])):
-            if map[y][x] not in '[+], [D], [S], [W]' : #check adjacent case
-                counter = map[y][x].strip("[]")
-                if counter == ' ':
+            if map[y][x] not in ('[+]', '[D]', '[S]', '[W]'):
+                if map[y][x] != '[S]' and map[y][x] !=  '[W]': #check adjacent case
+                #counter = map[y][x].strip("[]")
+                #if counter == ' ':
                     counter = 0
-                counter = int(counter)
-                
-                j = -2
-                while j <3:
+                    counter = int(counter)
                     
-                    
+                    j = -(dimension//2)
+                    while j <(dimension//2)+1:
+                        
+                        
 
-                #for j in range (-2, 3): #this is a 5*5 radius effect
-                
-                    i = -2
-                    while i<3:
-                    #for i in range (-2, 3):
-
-                        if (y+j)in range(len(map)) and (x+i) in range(len(map[0])): 
-                            if map[y+j][x+i] == "[+]":#or "[D]" or '[S]' or '[W]'):
-                                #counter = map[y+j][x+i].strip("[]")
-          
-                                #counter = counter
-                                #if counter == ' ':
-                                 #   counter = 0 
-                                
-                                
-                                counter += 1
-                            else: 
-                                counter = counter
-                        i+=1
-                    j+=1
-                map[y][x] = f'[{counter}]'
-                counter = 0 #higher value means greater priority
+                    #for j in range (-2, 3): #this is a 5*5 radius effect
                     
-    return map       
+                        i = -(dimension//2)
+                        while i< (dimension//2)+1:
+                        #for i in range (-2, 3):
+
+                            if (y+j)in range(len(map)) and (x+i) in range(len(map[0])): 
+                                if map[y+j][x+i] in ('[+]', '[D]', '[S]', '[W]'):
+                                    #counter = map[y+j][x+i].strip("[]")
+            
+                                    #counter = counter
+                                    #if counter == ' ':
+                                    #   counter = 0 
+                                    
+                                    
+                                    counter += 1
+                                
+                            i+=1
+                        j+=1
+                    map[y][x] = f'[{counter}]'
+                #counter = 0 #higher value means greater priority
+                    
+    return map  
+
+
+
+#TODO: 
+# efficient mode using the path
+
 #def position_finder(map):-
 #list of path, for element not in path, if next to a path or if 
 # movement in staight line: cross_mvt_list = [[0,1],[0,-1],[1,0], [-1,0]] 
@@ -159,8 +166,31 @@ def spot_finder2(map):
 
 #chess game
     #diagonal
-    
-#pathfinding
+def spot_finder3(n, map): 
+    dimension = n #choose your dxd dimension
+
+    for y in range(len(map)):
+        for x in range(len(map[y])):
+            if map[y][x] in '[+], [S], [D], [W]': #check adjacent case
+                
+                j = -(dimension//2)
+                while j <(dimension//2)+1:
+                    i = -(dimension//2)
+                    while i< (dimension//2)+1:
+
+                        if (y+j)in range(len(map)) and (x+i) in range(len(map[0])): 
+                            if map[y+j][x+i] not in ('[+]', '[D]', '[S]', '[W]'):
+                                counter = map[y+j][x+i].strip("[]")
+                                if counter == ' ':
+                                    counter = 0 
+                                else:
+                                    counter = int(counter)
+
+                                counter += 1
+                                map[y+j][x+i] = f'[{counter}]' #higher value means greater priority
+                        i+=1
+                    j+=1
+    return map
 
 
 
@@ -173,8 +203,13 @@ if __name__ == "__main__":
 
     print('Corners:3x3')
 
-    e = spot_finder(d)
-    show_map(e)
+    """e = spot_finder(d)
+    show_map(e)"""
 
-    print('5x5')
-    show_map(spot_finder2(d))
+    """print('5x5')
+    f = spot_finder2(d)
+    show_map(f)"""
+
+    print('5x5 optimized')
+    l = spot_finder3(5, d)
+    show_map(l)
